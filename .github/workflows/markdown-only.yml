@@ -1,0 +1,28 @@
+﻿name: Markdown only
+
+# WHEN to run: on every pull request, and on every push to main
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  markdown-only:
+    runs-on: ubuntu-latest   # a temporary machine GitHub lends us
+    steps:
+      # 1. Copy the repo onto the temporary machine
+      - uses: actions/checkout@v4
+
+      # 2. List every file git tracks, drop the .md ones and the few
+      #    allowed exceptions. Anything left over is a violation.
+      - name: Fail if any file is not Markdown
+        run: |
+          bad=$(git ls-files \
+            | grep -v -i -E '\.md$' \
+            | grep -v -E '^(\.gitignore|LICENSE|\.github/workflows/markdown-only\.yml)$' || true)
+          if [ -n "$bad" ]; then
+            echo "::error::These files are not Markdown:"
+            echo "$bad"
+            exit 1
+          fi
+          echo "All files are Markdown."
