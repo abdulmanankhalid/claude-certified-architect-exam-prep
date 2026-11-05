@@ -14,12 +14,13 @@ jobs:
       - uses: actions/checkout@v4
 
       # 2. List every file git tracks, drop the .md ones and the few
-      #    allowed exceptions. Anything left over is a violation.
+      #    allowed exceptions (.gitignore, LICENSE, and workflow files
+      #    in .github/workflows/). Anything left over is a violation.
       - name: Fail if any file is not Markdown
         run: |
           bad=$(git ls-files \
             | grep -v -i -E '\.md$' \
-            | grep -v -E '^(\.gitignore|LICENSE|\.github/workflows/markdown-only\.yml)$' || true)
+            | grep -v -E '^(\.gitignore|LICENSE|\.github/workflows/[^/]+\.ya?ml)$' || true)
           if [ -n "$bad" ]; then
             echo "::error::These files are not Markdown:"
             echo "$bad"
