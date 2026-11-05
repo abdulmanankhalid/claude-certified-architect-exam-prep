@@ -6,7 +6,9 @@ This repository contains Markdown files only.
 
 ## Contents
 
-Coming soon. Notes will be added topic by topic.
+Notes will be added topic by topic.
+
+- [CI Notes: Claude Code as a CI Worker](ci-notes.md)
 
 ## Contributing
 
