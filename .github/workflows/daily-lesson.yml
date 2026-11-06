@@ -1,0 +1,70 @@
+name: Daily Lesson
+
+# WHEN to run
+on:
+  schedule:
+    # Cron uses UTC. 16:00 UTC = 9:00 PM Pakistan time (UTC+5).
+    - cron: "0 16 * * *"
+  # Adds a "Run workflow" button on the Actions tab, for testing any time
+  workflow_dispatch:
+
+# Never run two lesson jobs at once
+concurrency:
+  group: daily-lesson
+  cancel-in-progress: false
+
+jobs:
+  lesson:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: write   # commit and push the new lesson to main
+      id-token: write   # needed by the Claude action to sign in
+    steps:
+      # 1. Copy the repo onto the temporary machine
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      # 2. Set the name shown on the commits
+      - name: Configure git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      # 3. Ask Claude to write and push today's lesson
+      - name: Write today's lesson with Claude
+        uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          prompt: |
+            You maintain a study repo for the Claude Certified Architect exam.
+            Your job: add ONE new lesson today and push it straight to main.
+
+            1. Read README.md and every file in lessons/ (the folder may not exist yet).
+               Note which topics are already covered, including the other notes in the repo root.
+            2. Choose ONE new topic that is useful for the exam and not covered yet.
+               Good areas: Claude API and Messages API, tool use, prompt engineering,
+               prompt caching, context windows, agents and the Agent SDK, MCP,
+               Claude Code (CLAUDE.md, hooks, skills, subagents, CI), evaluation,
+               safety and guardrails, cost and latency trade-offs, architecture patterns.
+               Build on earlier lessons and move from basics to advanced over time.
+            3. Write the lesson as lessons/NNN-short-topic-slug.md, where NNN is the next
+               number with leading zeros (001, 002, ...). Structure:
+               - Title
+               - What you will learn (3 to 5 bullets)
+               - Explanation in simple language, with small examples or code where helpful
+               - Common exam traps
+               - 3 practice questions, with answers in a collapsible <details> block
+               - Key takeaways
+            4. In README.md, add a link to the lesson under "## Contents", in a
+               "### Daily Lessons" sub-list (create it if missing).
+            5. Markdown files only. Do not create or change any other kind of file,
+               and do not touch .github/.
+            6. Commit with the message "Add daily lesson NNN: <topic>" and run
+               git push origin HEAD:main.
+          claude_args: |
+            --max-turns 30
+            --allowedTools "Read,Write,Edit,Glob,Grep,Bash(ls:*),Bash(git status:*),Bash(git diff:*),Bash(git log:*),Bash(git add:*),Bash(git commit:*),Bash(git push:*)"
