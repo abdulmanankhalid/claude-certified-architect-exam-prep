@@ -14,6 +14,7 @@ Notes will be added topic by topic.
 ### Daily Lessons
 
 - [001: The Messages API](lessons/001-messages-api-basics.md)
+- [002: Tool Use](lessons/002-tool-use-basics.md)
 
 ## Contributing
 
