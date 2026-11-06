@@ -74,6 +74,11 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
+          # The Claude action swaps in its own short-lived git login, which has
+          # expired by now. Point git back at this workflow's token.
+          git config --local --unset-all http.https://github.com/.extraheader || true
+          git remote set-url origin "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+
           file=$(git status --porcelain --untracked-files=all -- lessons/ \
             | awk '{print $NF}' | grep '\.md$' | head -n1 || true)
           if [ -z "$file" ]; then
