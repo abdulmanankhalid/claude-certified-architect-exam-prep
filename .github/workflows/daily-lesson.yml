@@ -1,6 +1,9 @@
 name: Daily Lesson
 
-# WHEN to run
+# Every night Claude writes one new lesson and opens a PR with its own GitHub
+# App login. That login is trusted, so the checks start by themselves (no
+# "Approve and run" click). The PR auto-merges once all required checks pass:
+# markdown-only, claude-review and claude-safety-check.
 on:
   schedule:
     # Cron uses UTC. 16:00 UTC = 9:00 PM Pakistan time (UTC+5).
@@ -16,92 +19,59 @@ concurrency:
 jobs:
   lesson:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 30
     permissions:
-      contents: write       # push the lesson branch
-      pull-requests: write  # open the PR and turn on auto-merge
-      actions: write        # start the markdown-only check on the PR
-      id-token: write       # needed by the Claude action to sign in
+      contents: read   # Claude pushes with its own GitHub App login, not this token
+      id-token: write  # needed by the Claude action to get that login
     steps:
       # 1. Copy the repo onto the temporary machine
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          ref: main
-          fetch-depth: 0
+          fetch-depth: 1
 
-      # 2. Claude writes the lesson files (no git work, the next step does that)
-      - name: Write today's lesson with Claude
+      # 2. Today's date in Pakistan, used for the branch name
+      - name: Get today's date (Pakistan time)
+        id: today
+        run: echo "date=$(TZ=Asia/Karachi date +%F)" >> "$GITHUB_OUTPUT"
+
+      # 3. Claude writes the lesson, pushes a branch, opens a PR, turns on auto-merge
+      - name: Write and ship today's lesson with Claude
         uses: anthropics/claude-code-action@v1
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          claude_args: >-
+            --max-turns 40
+            --allowedTools "Read,Write,Edit,Glob,Grep,Bash(ls:*),Bash(git checkout:*),Bash(git status:*),Bash(git diff:*),Bash(git add:*),Bash(git commit:*),Bash(git push:*),Bash(gh pr create:*),Bash(gh pr merge:*)"
           prompt: |
             You maintain a study repo for the Claude Certified Architect exam.
-            Your job: write ONE new lesson today.
+            Add ONE new lesson today (${{ steps.today.outputs.date }}).
 
-            1. Read README.md and every file in lessons/ (the folder may not exist yet).
-               Note which topics are already covered, including the other notes in the repo root.
-            2. Choose ONE new topic that is useful for the exam and not covered yet.
-               Good areas: Claude API and Messages API, tool use, prompt engineering,
-               prompt caching, context windows, agents and the Agent SDK, MCP,
-               Claude Code (CLAUDE.md, hooks, skills, subagents, CI), evaluation,
-               safety and guardrails, cost and latency trade-offs, architecture patterns.
-               Build on earlier lessons and move from basics to advanced over time.
-            3. Write the lesson as lessons/NNN-short-topic-slug.md, where NNN is the next
-               number with leading zeros (001, 002, ...). The first line must be
-               "# <Lesson title>". Structure:
-               - What you will learn (3 to 5 bullets)
-               - Explanation in simple language, with small examples or code where helpful
-               - Common exam traps
-               - 3 practice questions, with answers in a collapsible <details> block
-               - Key takeaways
-            4. In README.md, add a link to the lesson under "## Contents", in a
-               "### Daily Lessons" sub-list (create it if missing).
-            5. Markdown files only. Do not create or change any other kind of file,
-               and do not touch .github/.
-            6. Do not run git. Only write the files; a later step commits them.
-          claude_args: |
-            --max-turns 30
-            --allowedTools "Read,Write,Edit,Glob,Grep,Bash(ls:*)"
+            1. Choose the topic
+               - Read README.md, every file in lessons/ (the folder may not exist yet),
+                 and the other notes in the repo root.
+               - Pick ONE topic useful for the exam that is not covered yet. Good areas:
+                 Claude API and Messages API, tool use, prompt engineering, prompt caching,
+                 context windows, agents and the Agent SDK, MCP, Claude Code (CLAUDE.md,
+                 hooks, skills, subagents, CI), evaluation, safety and guardrails,
+                 cost and latency trade-offs, architecture patterns.
+               - Build on earlier lessons and move from basics to advanced over time.
+                 Do not repeat or lightly reword an existing lesson.
 
-      # 3. Commit to a new branch, open a PR, auto-merge it when the check passes.
-      #    main is protected (PR + markdown-only check required), so no direct push.
-      - name: Open PR and turn on auto-merge
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          set -euo pipefail
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            2. Write the lesson
+               - Create lessons/NNN-short-topic-slug.md, where NNN is the next number
+                 with leading zeros (001, 002, ...). The first line is "# <Lesson title>".
+               - Structure: what you will learn (3 to 5 bullets); explanation in simple
+                 language with small examples or code; common exam traps; 3 practice
+                 questions with answers in a collapsible <details> block; key takeaways.
+               - In README.md, add a link to the lesson under "## Contents", in a
+                 "### Daily Lessons" sub-list (create it if missing).
+               - Markdown files only. Do not touch .github/ or edit other existing notes.
 
-          # The Claude action swaps in its own short-lived git login, which has
-          # expired by now. Point git back at this workflow's token.
-          git config --local --unset-all http.https://github.com/.extraheader || true
-          git remote set-url origin "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
-
-          file=$(git status --porcelain --untracked-files=all -- lessons/ \
-            | awk '{print $NF}' | grep '\.md$' | head -n1 || true)
-          if [ -z "$file" ]; then
-            echo "::error::Claude did not create a new lesson in lessons/."
-            exit 1
-          fi
-          num=$(basename "$file" | cut -d- -f1)
-          title=$(grep -m1 '^# ' "$file" | sed 's/^# //' || true)
-          title=${title:-$(basename "$file" .md)}
-          branch="daily-lesson/$(date -u +%Y-%m-%d)-$num"
-
-          git switch -c "$branch"
-          git add -A
-          git commit -m "Add daily lesson $num: $title"
-          git push origin "$branch"
-
-          gh pr create --base main --head "$branch" \
-            --title "Daily lesson $num: $title" \
-            --body "Automatic daily lesson written by Claude. Merges on its own once the markdown-only check passes."
-
-          # Turn on auto-merge first, while the PR is still waiting for its check
-          gh pr merge "$branch" --squash --auto
-
-          # PRs opened by this workflow's token do not start other workflows,
-          # so start the required markdown-only check on the branch ourselves.
-          gh workflow run markdown-only.yml --ref "$branch"
+            3. Ship it (run these exactly, filling in NNN and the topic)
+               git checkout -b daily-lesson/${{ steps.today.outputs.date }}
+               git add -A
+               git commit -m "Add daily lesson NNN: <topic>"
+               git push -u origin daily-lesson/${{ steps.today.outputs.date }}
+               gh pr create --base main --title "Daily lesson NNN: <topic>" --body "Daily lesson for ${{ steps.today.outputs.date }}: <one-sentence summary>. Merges on its own once all required checks pass."
+               gh pr merge --auto --squash
