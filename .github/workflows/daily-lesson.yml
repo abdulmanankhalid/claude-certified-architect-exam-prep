@@ -1,0 +1,102 @@
+name: Daily Lesson
+
+# WHEN to run
+on:
+  schedule:
+    # Cron uses UTC. 16:00 UTC = 9:00 PM Pakistan time (UTC+5).
+    - cron: "0 16 * * *"
+  # Adds a "Run workflow" button on the Actions tab, for testing any time
+  workflow_dispatch:
+
+# Never run two lesson jobs at once
+concurrency:
+  group: daily-lesson
+  cancel-in-progress: false
+
+jobs:
+  lesson:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: write       # push the lesson branch
+      pull-requests: write  # open the PR and turn on auto-merge
+      actions: write        # start the markdown-only check on the PR
+      id-token: write       # needed by the Claude action to sign in
+    steps:
+      # 1. Copy the repo onto the temporary machine
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      # 2. Claude writes the lesson files (no git work, the next step does that)
+      - name: Write today's lesson with Claude
+        uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          prompt: |
+            You maintain a study repo for the Claude Certified Architect exam.
+            Your job: write ONE new lesson today.
+
+            1. Read README.md and every file in lessons/ (the folder may not exist yet).
+               Note which topics are already covered, including the other notes in the repo root.
+            2. Choose ONE new topic that is useful for the exam and not covered yet.
+               Good areas: Claude API and Messages API, tool use, prompt engineering,
+               prompt caching, context windows, agents and the Agent SDK, MCP,
+               Claude Code (CLAUDE.md, hooks, skills, subagents, CI), evaluation,
+               safety and guardrails, cost and latency trade-offs, architecture patterns.
+               Build on earlier lessons and move from basics to advanced over time.
+            3. Write the lesson as lessons/NNN-short-topic-slug.md, where NNN is the next
+               number with leading zeros (001, 002, ...). The first line must be
+               "# <Lesson title>". Structure:
+               - What you will learn (3 to 5 bullets)
+               - Explanation in simple language, with small examples or code where helpful
+               - Common exam traps
+               - 3 practice questions, with answers in a collapsible <details> block
+               - Key takeaways
+            4. In README.md, add a link to the lesson under "## Contents", in a
+               "### Daily Lessons" sub-list (create it if missing).
+            5. Markdown files only. Do not create or change any other kind of file,
+               and do not touch .github/.
+            6. Do not run git. Only write the files; a later step commits them.
+          claude_args: |
+            --max-turns 30
+            --allowedTools "Read,Write,Edit,Glob,Grep,Bash(ls:*)"
+
+      # 3. Commit to a new branch, open a PR, auto-merge it when the check passes.
+      #    main is protected (PR + markdown-only check required), so no direct push.
+      - name: Open PR and turn on auto-merge
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          file=$(git status --porcelain --untracked-files=all -- lessons/ \
+            | awk '{print $NF}' | grep '\.md$' | head -n1 || true)
+          if [ -z "$file" ]; then
+            echo "::error::Claude did not create a new lesson in lessons/."
+            exit 1
+          fi
+          num=$(basename "$file" | cut -d- -f1)
+          title=$(grep -m1 '^# ' "$file" | sed 's/^# //' || true)
+          title=${title:-$(basename "$file" .md)}
+          branch="daily-lesson/$(date -u +%Y-%m-%d)-$num"
+
+          git switch -c "$branch"
+          git add -A
+          git commit -m "Add daily lesson $num: $title"
+          git push origin "$branch"
+
+          gh pr create --base main --head "$branch" \
+            --title "Daily lesson $num: $title" \
+            --body "Automatic daily lesson written by Claude. Merges on its own once the markdown-only check passes."
+
+          # Turn on auto-merge first, while the PR is still waiting for its check
+          gh pr merge "$branch" --squash --auto
+
+          # PRs opened by this workflow's token do not start other workflows,
+          # so start the required markdown-only check on the branch ourselves.
+          gh workflow run markdown-only.yml --ref "$branch"

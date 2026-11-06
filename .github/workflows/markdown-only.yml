@@ -5,6 +5,8 @@ on:
   pull_request:
   push:
     branches: [main]
+  # Lets the Daily Lesson workflow start this check on its own PRs
+  workflow_dispatch:
 
 jobs:
   markdown-only:
