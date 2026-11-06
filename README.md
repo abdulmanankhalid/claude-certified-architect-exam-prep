@@ -9,6 +9,7 @@ This repository contains Markdown files only.
 Notes will be added topic by topic.
 
 - [CI Notes: Claude Code as a CI Worker](ci-notes.md)
+- [GitHub Actions and CI Triggers, Explained Simply](github-actions-explained.md)
 
 ## Contributing
 
