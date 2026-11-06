@@ -15,6 +15,7 @@ Notes will be added topic by topic.
 
 - [001: The Messages API](lessons/001-messages-api-basics.md)
 - [002: Tool Use](lessons/002-tool-use-basics.md)
+- [003: Prompt Caching](lessons/003-prompt-caching.md)
 
 ## Contributing
 
