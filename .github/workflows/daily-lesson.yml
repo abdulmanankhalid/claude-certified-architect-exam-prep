@@ -6,8 +6,9 @@ name: Daily Lesson
 # markdown-only, claude-review and claude-safety-check.
 on:
   schedule:
-    # Cron uses UTC. 16:00 UTC = 9:00 PM Pakistan time (UTC+5).
-    - cron: "0 16 * * *"
+    # Cron uses UTC. 16:17 UTC = 9:17 PM Pakistan time (UTC+5).
+    # Odd minute on purpose: GitHub delays runs at :00 the most.
+    - cron: "17 16 * * *"
   # Adds a "Run workflow" button on the Actions tab, for testing any time
   workflow_dispatch:
 
