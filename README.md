@@ -17,6 +17,7 @@ Notes will be added topic by topic.
 - [002: Tool Use](lessons/002-tool-use-basics.md)
 - [003: Prompt Caching](lessons/003-prompt-caching.md)
 - [004: The Agentic Loop](lessons/004-agentic-loop.md)
+- [005: Model Context Protocol (MCP)](lessons/005-mcp-basics.md)
 
 ## Contributing
 
