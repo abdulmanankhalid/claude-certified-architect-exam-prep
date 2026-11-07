@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest   # a temporary machine GitHub lends us
     steps:
       # 1. Copy the repo onto the temporary machine
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       # 2. List every file git tracks, drop the .md ones and the few
       #    allowed exceptions (.gitignore, LICENSE, and workflow files
