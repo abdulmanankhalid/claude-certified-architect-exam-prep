@@ -30,6 +30,10 @@ jobs:
         uses: actions/checkout@v7
         with:
           fetch-depth: 1
+          # Don't save the read-only GITHUB_TOKEN in git config. checkout v6+
+          # hides it in a separate file the Claude action can't remove, and it
+          # then blocks Claude's own login from pushing the lesson branch.
+          persist-credentials: false
 
       # 2. Today's date in Pakistan, used for the branch name
       - name: Get today's date (Pakistan time)
@@ -76,3 +80,17 @@ jobs:
                git push -u origin daily-lesson/${{ steps.today.outputs.date }}
                gh pr create --base main --title "Daily lesson NNN: <topic>" --body "Daily lesson for ${{ steps.today.outputs.date }}: <one-sentence summary>. Merges on its own once all required checks pass."
                gh pr merge --auto --squash
+
+      # 4. Turn the run RED if Claude didn't push the lesson branch
+      #    (otherwise a failed push still shows as a green run)
+      - name: Check the lesson branch was pushed
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BRANCH: daily-lesson/${{ steps.today.outputs.date }}
+        run: |
+          if gh api "repos/${{ github.repository }}/branches/$BRANCH" --silent; then
+            echo "Lesson branch $BRANCH was pushed."
+          else
+            echo "::error::Claude did not push $BRANCH, so no lesson PR was opened."
+            exit 1
+          fi
