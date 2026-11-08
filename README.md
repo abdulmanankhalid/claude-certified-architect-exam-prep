@@ -19,6 +19,7 @@ Notes will be added topic by topic.
 - [004: The Agentic Loop](lessons/004-agentic-loop.md)
 - [005: Model Context Protocol (MCP)](lessons/005-mcp-basics.md)
 - [006: Claude Code Configuration: CLAUDE.md, Permissions, and Hooks](lessons/006-claude-code-claude-md-and-hooks.md)
+- [007: Evaluating Claude Applications](lessons/007-evaluating-claude-applications.md)
 
 ## Contributing
 
