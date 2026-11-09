@@ -21,6 +21,7 @@ Notes will be added topic by topic.
 - [006: Claude Code Configuration: CLAUDE.md, Permissions, and Hooks](lessons/006-claude-code-claude-md-and-hooks.md)
 - [007: Evaluating Claude Applications](lessons/007-evaluating-claude-applications.md)
 - [008: Safety and Guardrails: Defending Against Prompt Injection](lessons/008-guardrails-and-prompt-injection.md)
+- [009: Multi-Agent Architectures: Orchestrators, Subagents, and Context Isolation](lessons/009-multi-agent-and-subagents.md)
 
 ## Contributing
 
