@@ -22,6 +22,7 @@ Notes will be added topic by topic.
 - [007: Evaluating Claude Applications](lessons/007-evaluating-claude-applications.md)
 - [008: Safety and Guardrails: Defending Against Prompt Injection](lessons/008-guardrails-and-prompt-injection.md)
 - [009: Multi-Agent Architectures: Orchestrators, Subagents, and Context Isolation](lessons/009-multi-agent-and-subagents.md)
+- [010: Context Window Management: Budgeting, Trimming, and Compacting Long Conversations](lessons/010-context-window-management.md)
 
 ## Contributing
 
