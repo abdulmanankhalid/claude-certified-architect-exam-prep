@@ -23,6 +23,7 @@ Notes will be added topic by topic.
 - [008: Safety and Guardrails: Defending Against Prompt Injection](lessons/008-guardrails-and-prompt-injection.md)
 - [009: Multi-Agent Architectures: Orchestrators, Subagents, and Context Isolation](lessons/009-multi-agent-and-subagents.md)
 - [010: Context Window Management: Budgeting, Trimming, and Compacting Long Conversations](lessons/010-context-window-management.md)
+- [011: Cost and Latency Trade-offs: Model Choice, Batching, Streaming, and Output Control](lessons/011-cost-and-latency-tradeoffs.md)
 
 ## Contributing
 
