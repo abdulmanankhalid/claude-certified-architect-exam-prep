@@ -24,6 +24,7 @@ Notes will be added topic by topic.
 - [009: Multi-Agent Architectures: Orchestrators, Subagents, and Context Isolation](lessons/009-multi-agent-and-subagents.md)
 - [010: Context Window Management: Budgeting, Trimming, and Compacting Long Conversations](lessons/010-context-window-management.md)
 - [011: Cost and Latency Trade-offs: Model Choice, Batching, Streaming, and Output Control](lessons/011-cost-and-latency-tradeoffs.md)
+- [012: Prompt Engineering Techniques: Clear Instructions, XML Structure, Examples, and Structured Output](lessons/012-prompt-engineering-techniques.md)
 
 ## Contributing
 
