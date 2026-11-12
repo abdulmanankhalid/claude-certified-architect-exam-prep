@@ -27,6 +27,7 @@ Notes will be added topic by topic.
 - [012: Prompt Engineering Techniques: Clear Instructions, XML Structure, Examples, and Structured Output](lessons/012-prompt-engineering-techniques.md)
 - [013: Claude Code Extensibility: Skills, Custom Subagents, Slash Commands, and Headless Mode](lessons/013-claude-code-skills-subagents-headless.md)
 - [014: Extended Thinking: Giving Claude a Reasoning Budget](lessons/014-extended-thinking.md)
+- [015: Retrieval-Augmented Generation (RAG): Grounding Claude in Your Own Data](lessons/015-rag-and-citations.md)
 
 ## Contributing
 
