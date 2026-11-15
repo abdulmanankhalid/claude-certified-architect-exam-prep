@@ -30,6 +30,7 @@ Notes will be added topic by topic.
 - [015: Retrieval-Augmented Generation (RAG): Grounding Claude in Your Own Data](lessons/015-rag-and-citations.md)
 - [016: Reliability: API Errors, Rate Limits, Retries, and Graceful Degradation](lessons/016-errors-rate-limits-and-retries.md)
 - [017: Vision and Document Inputs: Images, PDFs, and Multimodal Prompts](lessons/017-vision-and-document-inputs.md)
+- [018: Workflow Patterns vs. Agents: Chaining, Routing, Parallelization, and Evaluator-Optimizer](lessons/018-workflow-patterns-vs-agents.md)
 
 ## Contributing
 
