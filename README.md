@@ -32,6 +32,7 @@ Notes will be added topic by topic.
 - [017: Vision and Document Inputs: Images, PDFs, and Multimodal Prompts](lessons/017-vision-and-document-inputs.md)
 - [018: Workflow Patterns vs. Agents: Chaining, Routing, Parallelization, and Evaluator-Optimizer](lessons/018-workflow-patterns-vs-agents.md)
 - [019: Tool Design for Agents: Descriptions, Granularity, Responses, and Tool Overload](lessons/019-tool-design-for-agents.md)
+- [020: Human-in-the-Loop: Approval Gates, Risk Tiers, and Safe Autonomy for Agents](lessons/020-human-in-the-loop-and-approval-gates.md)
 
 ## Contributing
 
