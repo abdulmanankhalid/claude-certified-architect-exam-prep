@@ -31,6 +31,7 @@ Notes will be added topic by topic.
 - [016: Reliability: API Errors, Rate Limits, Retries, and Graceful Degradation](lessons/016-errors-rate-limits-and-retries.md)
 - [017: Vision and Document Inputs: Images, PDFs, and Multimodal Prompts](lessons/017-vision-and-document-inputs.md)
 - [018: Workflow Patterns vs. Agents: Chaining, Routing, Parallelization, and Evaluator-Optimizer](lessons/018-workflow-patterns-vs-agents.md)
+- [019: Tool Design for Agents: Descriptions, Granularity, Responses, and Tool Overload](lessons/019-tool-design-for-agents.md)
 
 ## Contributing
 
