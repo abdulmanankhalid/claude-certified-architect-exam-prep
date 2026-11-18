@@ -33,6 +33,7 @@ Notes will be added topic by topic.
 - [018: Workflow Patterns vs. Agents: Chaining, Routing, Parallelization, and Evaluator-Optimizer](lessons/018-workflow-patterns-vs-agents.md)
 - [019: Tool Design for Agents: Descriptions, Granularity, Responses, and Tool Overload](lessons/019-tool-design-for-agents.md)
 - [020: Human-in-the-Loop: Approval Gates, Risk Tiers, and Safe Autonomy for Agents](lessons/020-human-in-the-loop-and-approval-gates.md)
+- [021: Observability for Claude Applications: Tracing, Logging, and Debugging Agents](lessons/021-observability-and-tracing-for-agents.md)
 
 ## Contributing
 
