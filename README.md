@@ -34,6 +34,7 @@ Notes will be added topic by topic.
 - [019: Tool Design for Agents: Descriptions, Granularity, Responses, and Tool Overload](lessons/019-tool-design-for-agents.md)
 - [020: Human-in-the-Loop: Approval Gates, Risk Tiers, and Safe Autonomy for Agents](lessons/020-human-in-the-loop-and-approval-gates.md)
 - [021: Observability for Claude Applications: Tracing, Logging, and Debugging Agents](lessons/021-observability-and-tracing-for-agents.md)
+- [022: Agent Memory and State Persistence: Memory Tool, Scratchpads, and Checkpoints](lessons/022-agent-memory-and-state-persistence.md)
 
 ## Contributing
 
