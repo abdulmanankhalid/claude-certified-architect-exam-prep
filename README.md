@@ -36,6 +36,7 @@ Notes will be added topic by topic.
 - [021: Observability for Claude Applications: Tracing, Logging, and Debugging Agents](lessons/021-observability-and-tracing-for-agents.md)
 - [022: Agent Memory and State Persistence: Memory Tool, Scratchpads, and Checkpoints](lessons/022-agent-memory-and-state-persistence.md)
 - [023: The Claude Agent SDK: Building Production Agents with Built-in Tools, Permissions, and Sessions](lessons/023-claude-agent-sdk.md)
+- [024: Cloud Platforms and Enterprise Deployment: Bedrock, Vertex AI, Auth, and Data Governance](lessons/024-cloud-platforms-and-enterprise-deployment.md)
 
 ## Contributing
 
