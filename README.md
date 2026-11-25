@@ -39,6 +39,7 @@ Notes will be added topic by topic.
 - [024: Cloud Platforms and Enterprise Deployment: Bedrock, Vertex AI, Auth, and Data Governance](lessons/024-cloud-platforms-and-enterprise-deployment.md)
 - [025: Computer Use and Anthropic-Defined Tools: Client Tools vs. Server Tools](lessons/025-computer-use-and-anthropic-defined-tools.md)
 - [026: Parallel Tool Calls and Streaming Tool Use: Faster Agents Without Breaking the Protocol](lessons/026-parallel-tool-calls-and-streaming.md)
+- [027: Model Versioning and Migration: Pinning, Aliases, and Safe Upgrades](lessons/027-model-versioning-and-migration.md)
 
 ## Contributing
 
