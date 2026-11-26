@@ -40,6 +40,7 @@ Notes will be added topic by topic.
 - [025: Computer Use and Anthropic-Defined Tools: Client Tools vs. Server Tools](lessons/025-computer-use-and-anthropic-defined-tools.md)
 - [026: Parallel Tool Calls and Streaming Tool Use: Faster Agents Without Breaking the Protocol](lessons/026-parallel-tool-calls-and-streaming.md)
 - [027: Model Versioning and Migration: Pinning, Aliases, and Safe Upgrades](lessons/027-model-versioning-and-migration.md)
+- [028: Claude Code Workflows: Plan Mode, Context Hygiene, and Parallel Sessions](lessons/028-claude-code-workflows-plan-mode-and-context.md)
 
 ## Contributing
 
