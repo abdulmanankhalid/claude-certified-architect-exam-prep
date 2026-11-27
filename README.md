@@ -41,6 +41,7 @@ Notes will be added topic by topic.
 - [026: Parallel Tool Calls and Streaming Tool Use: Faster Agents Without Breaking the Protocol](lessons/026-parallel-tool-calls-and-streaming.md)
 - [027: Model Versioning and Migration: Pinning, Aliases, and Safe Upgrades](lessons/027-model-versioning-and-migration.md)
 - [028: Claude Code Workflows: Plan Mode, Context Hygiene, and Parallel Sessions](lessons/028-claude-code-workflows-plan-mode-and-context.md)
+- [029: Advanced MCP: Lifecycle, Authorization, Client Features, and Production Concerns](lessons/029-mcp-advanced-auth-sampling-and-production.md)
 
 ## Contributing
 
