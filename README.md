@@ -1,4 +1,4 @@
-﻿# Claude Certified Architect Exam Prep
+# Claude Certified Architect Exam Prep
 
 Study notes and preparation material for the Claude Certified Architect exam.
 
@@ -42,6 +42,7 @@ Notes will be added topic by topic.
 - [027: Model Versioning and Migration: Pinning, Aliases, and Safe Upgrades](lessons/027-model-versioning-and-migration.md)
 - [028: Claude Code Workflows: Plan Mode, Context Hygiene, and Parallel Sessions](lessons/028-claude-code-workflows-plan-mode-and-context.md)
 - [029: Advanced MCP: Lifecycle, Authorization, Client Features, and Production Concerns](lessons/029-mcp-advanced-auth-sampling-and-production.md)
+- [030: Message Batches and the Files API: Bulk Workloads and Reusable Inputs](lessons/030-batch-processing-and-files-api.md)
 
 ## Contributing
 
